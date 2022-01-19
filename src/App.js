@@ -1,5 +1,6 @@
 import './App.css';
 import {Navbar,NavbarBrand} from 'reactstrap';
+import Menu from './components/menucomponents';
 function App() {
   return (
     <div className="App">
@@ -9,7 +10,9 @@ function App() {
           <NavbarBrand href='/' >Jawad Mirza</NavbarBrand>
         </div>
       </Navbar>
+      <Menu />
       </header>
+    
     </div>
   );
 }
