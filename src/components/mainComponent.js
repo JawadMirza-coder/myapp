@@ -7,6 +7,7 @@ import { COMMENTS } from '../shared/Comments';
 import { PROMOTIONS } from '../shared/Promotion';
 import { LEADERS } from '../shared/Leaders';
 import ContectUs from './contectus';
+import About from './AboutUs';
 
 import { Route,Switch,Redirect  } from 'react-router-dom';
 
@@ -24,6 +25,7 @@ class Main extends Component {
         comments: COMMENTS,
         promotions: PROMOTIONS,
         leaders: LEADERS,
+
         // selectedDish: null
     };
   }
@@ -63,6 +65,7 @@ class Main extends Component {
          <Route exact path='/menu' component={() => <Menu dishes={this.state.dishes} />} />
          <Route path='/menu/:dishId' component={DishwithId}/>
          <Route path='/contactus' component={()=><ContectUs />} />
+         <Route path ='/aboutus' component={()=><About leader={this.state.leaders}/> } />
         <Redirect  to="/home" />
         </Switch>
 
