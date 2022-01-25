@@ -42,13 +42,11 @@ class ContectUs extends Component {
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
 
-    this.setState({
-      [name]: value,
-    });
+    this.setState({ [name]: value,});
   }
 
   handleSubmit(event) {
-    console.log("Current State is: " + JSON.stringify(this.state));
+    // console.log("Current State is: " + JSON.stringify(this.state));
     alert("Current State is: " + JSON.stringify(this.state));
     event.preventDefault();
   }
@@ -56,6 +54,7 @@ class ContectUs extends Component {
     this.setState({
       touched: { ...this.state.touched, [field]: true },
     });
+    console.log(evt)
   };
 
   validate(firstname, lastname, telnum, email) {
@@ -129,7 +128,7 @@ class ContectUs extends Component {
               <div className="col-12">
                 <h3>Send us your Feedback</h3>
               </div>
-              <div className="col-12 col-md-9">
+              <div className="col-12 col-md-12">
                 <Form onSubmit={this.handleSubmit}>
                   <FormGroup row>
                     <Label htmlFor="firstname" md={2}>
