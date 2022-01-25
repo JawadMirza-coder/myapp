@@ -54,7 +54,6 @@ class ContectUs extends Component {
     this.setState({
       touched: { ...this.state.touched, [field]: true },
     });
-    console.log(evt)
   };
 
   validate(firstname, lastname, telnum, email) {

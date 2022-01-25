@@ -5,11 +5,14 @@ import {
   NavbarToggler,
   Collapse,
   NavItem,
+  Form,
+  FormGroup,
+  Label,
+  Input,
 } from "reactstrap";
+import { Button, Modal, ModalHeader, ModalBody,ModalFooter } from "reactstrap";
 import { NavLink } from "react-router-dom";
 import React, { Component } from "react";
-
-
 
 class Header extends Component {
   constructor(props) {
@@ -18,13 +21,44 @@ class Header extends Component {
     this.toggleNav = this.toggleNav.bind(this);
     this.state = {
       isNavOpen: false,
+      modal: false,
     };
+
+    this.toggle = this.toggle.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
   }
 
   toggleNav() {
     this.setState({
       isNavOpen: !this.state.isNavOpen,
     });
+  }
+
+  toggle() {
+    this.setState({
+      modal: !this.state.modal,
+    });
+  }
+
+  handleLogin(event) {
+    this.toggle();
+    console.log(
+      "Username: " +
+        this.username.value +
+        " Password: " +
+        this.password.value +
+        " Remember: " +
+        this.remember.checked
+    );
+    alert(
+      "Username: " +
+        this.username.value +
+        " Password: " +
+        this.password.value +
+        " Remember: " +
+        this.remember.checked
+    );
+    event.preventDefault();
   }
 
   render() {
@@ -42,8 +76,12 @@ class Header extends Component {
               />
               RCF
             </NavbarBrand>
-            <Collapse isOpen={this.state.isNavOpen} navbar className='justify-content-end'>
-              <Nav navbar >
+            <Collapse
+              isOpen={this.state.isNavOpen}
+              navbar
+              className="justify-content-end"
+            >
+              <Nav navbar>
                 <NavItem>
                   <NavLink className="nav-link" to="/home">
                     Home
@@ -65,6 +103,13 @@ class Header extends Component {
                   </NavLink>
                 </NavItem>
               </Nav>
+              <Nav navbar>
+                <NavItem>
+                  <Button outline color="success" onClick={this.toggle}>
+                    {this.props.buttonLabel} Login
+                  </Button>
+                </NavItem>
+              </Nav>
             </Collapse>
           </div>
         </Navbar>
@@ -81,6 +126,55 @@ class Header extends Component {
               </div>
             </div>
           </div>
+        </div>
+        <div>
+          <Modal
+            isOpen={this.state.modal}
+            toggle={this.toggle}
+            className={this.props.className}
+          >
+            <ModalHeader toggle={this.toggle}>Login</ModalHeader>
+            <Form onSubmit={this.handleLogin}>
+            <ModalBody>
+                <FormGroup>
+                  <Label htmlFor="username">Username</Label>
+                  <Input
+                    type="text"
+                    id="username"
+                    name="username"
+                    innerRef={(input) => (this.username = input)}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label htmlFor="password">Password</Label>
+                  <Input
+                    type="password"
+                    id="password"
+                    name="password"
+                    innerRef={(input) => (this.password = input)}
+                  />
+                </FormGroup>
+                <FormGroup check>
+                  <Label check>
+                    <Input
+                      type="checkbox"
+                      name="remember"
+                      innerRef={(input) => (this.remember = input)}
+                    />
+                    Remember me
+                  </Label>
+                </FormGroup>
+                
+            
+            </ModalBody>
+<ModalFooter>
+<Button type="submit" value="submit" color="primary">
+                  Login
+                </Button>
+</ModalFooter>
+         
+            </Form>
+          </Modal>
         </div>
       </div>
     );
