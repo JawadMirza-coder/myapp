@@ -10,7 +10,7 @@ import {
   Label,
   Input,
 } from "reactstrap";
-import { Button, Modal, ModalHeader, ModalBody,ModalFooter } from "reactstrap";
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { NavLink } from "react-router-dom";
 import React, { Component } from "react";
 
@@ -135,7 +135,7 @@ class Header extends Component {
           >
             <ModalHeader toggle={this.toggle}>Login</ModalHeader>
             <Form onSubmit={this.handleLogin}>
-            <ModalBody>
+              <ModalBody>
                 <FormGroup>
                   <Label htmlFor="username">Username</Label>
                   <Input
@@ -164,15 +164,12 @@ class Header extends Component {
                     Remember me
                   </Label>
                 </FormGroup>
-                
-            
-            </ModalBody>
-<ModalFooter>
-<Button type="submit" value="submit" color="primary">
+              </ModalBody>
+              <ModalFooter>
+                <Button type="submit" value="submit" color="primary">
                   Login
                 </Button>
-</ModalFooter>
-         
+              </ModalFooter>
             </Form>
           </Modal>
         </div>
