@@ -8,7 +8,7 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   Col,
-  FormFeedback
+  FormFeedback,
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import {
@@ -25,58 +25,29 @@ import {
 function RenderDish({ dish }) {
   if (dish != null) {
     return (
-      <Card>
-        <CardImg top src={dish.image} alt={dish.name} />
-        <CardBody>
-          <CardTitle>{dish.name}</CardTitle>
-          <CardText>{dish.description}</CardText>
-          <CardText>Lable: {dish.label}</CardText>
-          <CardText>Price: {dish.price}</CardText>
-        </CardBody>
-      </Card>
+      <>
+        <Card>
+          <CardImg top src={dish.image} alt={dish.name} />
+          <CardBody>
+            <CardTitle>{dish.name}</CardTitle>
+            <CardText>{dish.description}</CardText>
+            <CardText>Lable: {dish.label}</CardText>
+            <CardText>Price: {dish.price}</CardText>
+          </CardBody>
+        </Card>
+      </>
     );
   } else return <div>No</div>;
 }
-
-function Rendercomments({ comt }) {
-  if (comt != null) {
-    const coents = comt.map((cmnt) => {
-      return (
-        <>
-          <div key={cmnt.id}>
-            <Card>
-              <CardBody>
-                <CardText>{cmnt.comment}</CardText>
-                <CardTitle>{cmnt.author}</CardTitle>
-                <CardTitle>
-                  {new Intl.DateTimeFormat("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "2-digit",
-                  }).format(new Date(Date.parse(cmnt.date)))}
-                </CardTitle>
-              </CardBody>
-            </Card>
-          </div>
-        </>
-      );
-    });
-    return <div> {coents} </div>;
-  } else return <div>No</div>;
-}
-
-class DishDetail extends Component {
+class CommentForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      rating: "",
-      username: "",
-      comment: "",
+      modal: false,
       touched: {
-        username: false,
+        author: false,
       },
     };
-
 
     this.toggle = this.toggle.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -84,23 +55,23 @@ class DishDetail extends Component {
     this.handleBlur = this.handleBlur.bind(this);
   }
 
-validate(username) {
-  const errors = {
-      username: ''
-  };
-  if (this.state.touched.username && username.length < 3)
-      errors.username = 'Username should be >= 3 characters';
-  else if (this.state.touched.username && username.length > 15)
-      errors.username = 'Username should be <= 10 characters';
+  validate(author) {
+    const errors = {
+      author: "",
+    };
+    if (this.state.touched.author && author.length < 3)
+      errors.author = "Username should be >= 3 characters";
+    else if (this.state.touched.author && author.length > 15)
+      errors.author = "Username should be <= 10 characters";
 
-  return errors;
-}
+    return errors;
+  }
 
-handleBlur = (field) => (evt) => {
+  handleBlur = (field) => (evt) => {
     this.setState({
       touched: { ...this.state.touched, [field]: true },
     });
-  }
+  };
 
   toggle() {
     this.setState({
@@ -119,13 +90,147 @@ handleBlur = (field) => (evt) => {
   }
 
   handleSubmit(event) {
-    console.log("Current State is: " + JSON.stringify("Rating: "+this.state.rating +" Username: "+ this.state.username +" Comment: "+ this.state.comment));
-    alert("Current State is: " + JSON.stringify("Rating: "+this.state.rating +" Username: "+ this.state.username +" Comment: "+ this.state.comment));
+    this.toggle();
+    this.props.addComment(
+      this.props.dishId,
+      this.state.rating,
+      this.state.author,
+      this.state.comment,
+    
+    );
+
     event.preventDefault();
+  }
+  render() {
+
+    const errors = this.validate(this.state.author);
+    console.log(this.state.author);
+    return (
+      <>
+        <Button className="p-2 my-2" color="success" onClick={this.toggle}>
+          {this.props.buttonLabel} Submit Comment
+        </Button>
+        <div>
+          <Modal
+            isOpen={this.state.modal}
+            toggle={this.toggle}
+            className={this.props.className}
+          >
+            <ModalHeader toggle={this.toggle}>Login</ModalHeader>
+            <Form onSubmit={this.handleSubmit}>
+              <ModalBody>
+                <FormGroup row className="d-flex">
+                  <Label htmlFor="rating" md={3}>
+                    Rating
+                  </Label>
+                  <Col md={9} className="d-flex">
+                    <Input
+                      className="flex-grow-1 form-control"
+                      type="select"
+                      name="rating"
+                      value={this.state.rating}
+                      onChange={this.handleInputChange}
+                    >
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                    </Input>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Label htmlFor="author" md={3}>
+                    Username
+                  </Label>
+                  <Col md={9}>
+                    <Input
+                      type="text"
+                      id="author"
+                      name="author"
+                      placeholder="Username"
+                      value={this.state.author}
+                      valid={errors.author === ""}
+                      invalid={errors.author !== ""}
+                      onBlur={this.handleBlur("author")}
+                      onChange={this.handleInputChange}
+                    />
+                    <FormFeedback>{errors.author}</FormFeedback>
+                  </Col>
+                </FormGroup>
+
+                <FormGroup row>
+                  <Label htmlFor="message" md={3}>
+                    Your Comment
+                  </Label>
+                  <Col md={9}>
+                    <Input
+                      type="textarea"
+                      id="comment"
+                      name="comment"
+                      rows="6"
+                      value={this.state.comment}
+                      onChange={this.handleInputChange}
+                    ></Input>
+                  </Col>
+                </FormGroup>
+              </ModalBody>
+              <ModalFooter>
+                <FormGroup row>
+                  <Col>
+                    <Button type="submit" color="primary" onClick={this.toggle}>
+                      Send Feedback
+                    </Button>
+                  </Col>
+                </FormGroup>
+              </ModalFooter>
+            </Form>
+          </Modal>
+        </div>
+      </>
+    );
+  }
+}
+function Rendercomments({ comt, addComment, dishId }) {
+  if (comt != null) {
+    console.log(dishId)
+    const coents = comt.map((cmnt) => {
+      return (
+        <>
+          <div key={cmnt.id}>
+            <Card>
+              <CardBody>
+                <CardText><h5>Comment:</h5> {cmnt.comment}</CardText>
+                <CardTitle><h5>--Author: </h5>{cmnt.author}</CardTitle>
+                <CardTitle><h5>Rating:</h5> {cmnt.rating}</CardTitle>
+                <CardTitle><h5>Date: </h5> {new Intl.DateTimeFormat("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "2-digit",
+                  }).format(new Date(Date.parse(cmnt.date)))}
+                </CardTitle>
+              </CardBody>
+            </Card>
+          </div>
+          <CommentForm  dishId={dishId} addComment={addComment} />
+        </>
+      );
+    });
+    return <div> {coents} </div>;
+  } else return <div>No</div>;
+}
+
+class DishDetail extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      rating: "",
+      author: "",
+      comment: "",
+    };
   }
 
   render() {
-    const errors = this.validate(this.state.username,this.state.comment);
     return (
       <>
         <Breadcrumb>
@@ -144,91 +249,12 @@ handleBlur = (field) => (evt) => {
             </div>
             <div className="col-6 col-md-5 col-sm-5 m-1">
               <h3>Comments</h3>
-              <Rendercomments comt={this.props.comments} />
-              <Button className="p-2 my-2" color="success" onClick={this.toggle}>
-                {this.props.buttonLabel} Submit Comment
-              </Button>
+              <Rendercomments
+                comt={this.props.comments}
+                addComment={this.props.addComment}
+                dishId={this.props.dish.id}
+              />
             </div>
-          </div>
-          <div>
-            <Modal
-              isOpen={this.state.modal}
-              toggle={this.toggle}
-              className={this.props.className}
-            >
-              <ModalHeader toggle={this.toggle}>Login</ModalHeader>
-              <Form onSubmit={this.handleSubmit}>
-                <ModalBody>
-                  <FormGroup row className="d-flex">
-                    <Label
-                      htmlFor="rating"
-                      
-                      md={3}
-                    >
-                      Rating
-                    </Label>
-                    <Col md={9} className="d-flex">
-                      <Input className="flex-grow-1 form-control"
-                        type="select"
-                        name="rating"
-                        value={this.state.rating}
-                        onChange={this.handleInputChange}
-                      >
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                      </Input>
-                    </Col>
-                  </FormGroup>
-                  <FormGroup row>
-                    <Label htmlFor="username" md={3}>
-                      Username
-                    </Label>
-                    <Col md={9}>
-                      <Input
-                        type="text"
-                        id="username"
-                        name="username"
-                        placeholder="Username"
-                        value={this.state.username}
-                        valid={errors.username === ''}
-                        invalid={errors.username !== ''}
-                        onBlur={this.handleBlur('username')}
-                        onChange={this.handleInputChange}
-                      />
-                        <FormFeedback>{errors.username}</FormFeedback>
-                    </Col>
-                  </FormGroup>
-
-                  <FormGroup row>
-                    <Label htmlFor="message" md={3}>
-                      Your Comment
-                    </Label>
-                    <Col md={9}>
-                      <Input
-                        type="textarea"
-                        id="comment"
-                        name="comment"
-                        rows="6"
-                        value={this.state.comment}
-                        onChange={this.handleInputChange}
-                      ></Input>
-                    </Col>
-                  </FormGroup>
-                </ModalBody>
-                <ModalFooter>
-                  <FormGroup row>
-                    <Col>
-                      <Button type="submit" color="primary">
-                        Send Feedback
-                      </Button>
-                    </Col>
-                  </FormGroup>
-                </ModalFooter>
-              </Form>
-            </Modal>
           </div>
         </div>
       </>
