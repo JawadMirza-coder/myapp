@@ -9,7 +9,7 @@ import { Route, Switch, Redirect } from "react-router-dom";
 import DishDetail from "./DishdetailComponent";
 import {connect} from 'react-redux';
 import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
-import { addComment } from "../redux/ActionCreators";
+import { addComment,addDishes } from "../redux/ActionCreators";
 
 const mapStateToProps=state=>{
   return{
@@ -25,7 +25,11 @@ const mapDispatchToProps=(dispatch) =>({
 
   addComment:(dishId,rating,author, comments)=>dispatch(
     addComment(dishId,rating,author, comments)
+  ),
+  addDishes:(image,name,category, label,price,featured,description ) =>dispatch(
+    addDishes(image,name,category, label,price,featured,description)
   )
+ 
 });
 class Main extends Component {
 
@@ -44,10 +48,12 @@ class Main extends Component {
           <DishDetail dish={this.props.dishes.filter((dish) => dish.id === parseInt(match.params.dishId,10))[0]} 
             comments={this.props.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))}
             addComment={this.props.addComment}
+          
             />
       );
     };
     return (
+
       <div>
         <Header />
         <Switch>
@@ -55,7 +61,7 @@ class Main extends Component {
           <Route
             exact
             path="/menu"
-            component={() => <Menu dishes={this.props.dishes} />}
+            component={() => <Menu dishes={this.props.dishes}   addDishes={this.props.addDishes} />}
           />
           <Route path="/menu/:dishId" component={DishWithId} />
           <Route path="/contactus" component={() => <ContectUs />} />

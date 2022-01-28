@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import {
   Card,
   CardBody,
@@ -34,6 +34,7 @@ function RenderDish({ dish }) {
             <CardText>Lable: {dish.label}</CardText>
             <CardText>Price: {dish.price}</CardText>
           </CardBody>
+          
         </Card>
       </>
     );
@@ -104,12 +105,9 @@ class CommentForm extends Component {
   render() {
 
     const errors = this.validate(this.state.author);
-    console.log(this.state.author);
     return (
       <>
-        <Button className="p-2 my-2" color="success" onClick={this.toggle}>
-          {this.props.buttonLabel} Submit Comment
-        </Button>
+        
         <div>
           <Modal
             isOpen={this.state.modal}
@@ -191,19 +189,20 @@ class CommentForm extends Component {
     );
   }
 }
+
 function Rendercomments({ comt, addComment, dishId }) {
   if (comt != null) {
-    console.log(dishId)
+    console.log("this is in")
     const coents = comt.map((cmnt) => {
       return (
-        <>
-          <div key={cmnt.id}>
+          <div  key={cmnt.id}>
+          <div >
             <Card>
-              <CardBody>
-                <CardText><h5>Comment:</h5> {cmnt.comment}</CardText>
-                <CardTitle><h5>--Author: </h5>{cmnt.author}</CardTitle>
-                <CardTitle><h5>Rating:</h5> {cmnt.rating}</CardTitle>
-                <CardTitle><h5>Date: </h5> {new Intl.DateTimeFormat("en-US", {
+              <CardBody >
+                <CardText>Comment: {cmnt.comment}</CardText>
+                <CardTitle>--Author: {cmnt.author}</CardTitle>
+                <CardTitle>Rating: {cmnt.rating}</CardTitle>
+                <CardTitle>Date: {new Intl.DateTimeFormat("en-US", {
                     year: "numeric",
                     month: "short",
                     day: "2-digit",
@@ -213,11 +212,14 @@ function Rendercomments({ comt, addComment, dishId }) {
             </Card>
           </div>
           <CommentForm  dishId={dishId} addComment={addComment} />
-        </>
+          </div>
+         
+         
+   
       );
     });
-    return <div> {coents} </div>;
-  } else return <div>No</div>;
+    return <div> {coents} <CommentForm  dishId={dishId} addComment={addComment} /></div>;
+  } else return <div> </div>;
 }
 
 class DishDetail extends Component {
@@ -228,7 +230,9 @@ class DishDetail extends Component {
       author: "",
       comment: "",
     };
+    
   }
+  
 
   render() {
     return (
@@ -253,7 +257,9 @@ class DishDetail extends Component {
                 comt={this.props.comments}
                 addComment={this.props.addComment}
                 dishId={this.props.dish.id}
+                
               />
+             
             </div>
           </div>
         </div>
