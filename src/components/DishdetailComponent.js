@@ -22,6 +22,7 @@ import {
   ModalBody,
   ModalFooter,
 } from "reactstrap";
+import {Loading} from './Loading';
 function RenderDish({ dish }) {
   if (dish != null) {
     return (
@@ -235,6 +236,27 @@ class DishDetail extends Component {
   
 
   render() {
+    if(this.props.isLoading){
+      return(
+        <div className="container">
+          <div className="row">
+            <Loading />
+          </div>
+
+        </div>
+      )
+    }
+    else if(this.props.errMess){
+      return(
+        <div className="container">
+          <div className="row">
+          <h3>{this.props.errMess}</h3>
+          </div>
+        </div>
+      )
+    }
+  else if(this.props.dish !=null)
+  {
     return (
       <>
         <Breadcrumb>
@@ -266,5 +288,6 @@ class DishDetail extends Component {
       </>
     );
   }
+}
 }
 export default DishDetail;

@@ -2,6 +2,7 @@ import React  from "react";
 
 import { Card, CardImg,Breadcrumb,BreadcrumbItem } from "reactstrap";
 import { Link } from "react-router-dom";
+import {Loading } from './Loading'
 import {
   Form,
   FormGroup,
@@ -261,13 +262,32 @@ class  Menu extends Component {
   const menu = this.props.dishes.map((dish) => {
     return (
       <div key={dish.id} className="col-12 col-md-2 col-sm-5 m-5 ">
-        <RenderMenuitem dish={dish} addDishes={this.props.addDishes}  />
+        <RenderMenuitem dish={dish} addDishes={this.props.addDishs}  />
       </div>
-      
-      
     )
   });
-
+  console.log(this.props.isLoading)
+  if (this.props.isLoading) {
+    return(
+        <div className="container">
+            <div className="row">            
+                <Loading />
+            </div>
+        </div>
+    );
+}
+else if (this.props.errMess) {
+    return(
+        <div className="container">
+            <div className="row"> 
+                <div className="col-12">
+                    <h4>{this.props.dishes.errMess}</h4>
+                </div>
+            </div>
+        </div>
+    );
+}
+  else{
   return (
     <>
     <Breadcrumb>
@@ -279,7 +299,7 @@ class  Menu extends Component {
     <div className="container ">
       <div className="row d-flex flex-row ">{menu}  </div>
     </div></>
-  );}
+  );}}
 };
 
 export default Menu;
