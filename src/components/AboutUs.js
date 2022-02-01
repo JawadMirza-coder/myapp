@@ -7,14 +7,15 @@ import {
   CardHeader,
   Media,
 } from "reactstrap";
+import { baseUrl } from "../shared/baseUrl";
 import { Link } from "react-router-dom";
 
 function About(props) {
   const leaders = props.leader.map((leader) => {
     return (
-      <Media tag="li">
+      <Media key={leader.id} tag="li">
         <Media left middle>
-          <Media object src={leader.image} alt={leader.name} />
+          <Media object src={baseUrl+leader.image} alt={leader.name} />
         </Media>
         <Media body className="ml-5">
           <Media heading>{leader.name}</Media>

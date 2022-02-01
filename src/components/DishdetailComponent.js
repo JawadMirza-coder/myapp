@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react";
+import { baseUrl } from "../shared/baseUrl";
 import {
   Card,
   CardBody,
@@ -28,7 +29,7 @@ function RenderDish({ dish }) {
     return (
       <>
         <Card>
-          <CardImg top src={dish.image} alt={dish.name} />
+          <CardImg top src={baseUrl+dish.image} alt={dish.name} />
           <CardBody>
             <CardTitle>{dish.name}</CardTitle>
             <CardText>{dish.description}</CardText>
@@ -98,7 +99,7 @@ class CommentForm extends Component {
       this.state.rating,
       this.state.author,
       this.state.comment,
-    
+    console.log(this.state.rating)
     );
 
     event.preventDefault();
@@ -108,7 +109,9 @@ class CommentForm extends Component {
     const errors = this.validate(this.state.author);
     return (
       <>
-        
+         <Button outline color="success" onClick={this.toggle}>
+                    {this.props.buttonLabel} Login
+                  </Button>
         <div>
           <Modal
             isOpen={this.state.modal}
@@ -270,7 +273,7 @@ class DishDetail extends Component {
         </Breadcrumb>
         <div className="container ">
           <div className="row">
-            <div className="col-6 col-md-5 col-sm-5 m-1">
+            <div className=" col-md-5 col-sm-12 m-1">
               <RenderDish dish={this.props.dish} />
             </div>
             <div className="col-6 col-md-5 col-sm-5 m-1">

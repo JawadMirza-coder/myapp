@@ -1,10 +1,9 @@
-import React from 'react';
+import React from "react";
+import Spinner from 'react-bootstrap/Spinner'
+export const Loading = () => {
+  return (
+    <Spinner animation="border" role="status">
 
-export const Loading =()=>{
-    return(
-        <div className='col-12'>
-            <span className='fa fa-spinner fa-pulse fa-3x fa-fw text-primary'></span>
-            <h1>Loading...</h1>
-        </div>
-    )
-}
+  </Spinner>
+  );
+};

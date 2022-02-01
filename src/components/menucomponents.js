@@ -1,5 +1,5 @@
 import React  from "react";
-
+import { baseUrl } from "../shared/baseUrl";
 import { Card, CardImg,Breadcrumb,BreadcrumbItem } from "reactstrap";
 import { Link } from "react-router-dom";
 import {Loading } from './Loading'
@@ -22,7 +22,7 @@ function RenderMenuitem({ dish, addDishes }) {
     <>
     <Link to={`/menu/${dish.id}`}>
       <Card  style={{ width: "18rem" }}>
-        <CardImg  variant="top" src={dish.image} alt={dish.name} />
+        <CardImg  variant="top" src={baseUrl + dish.image} alt={dish.name} />
       </Card> 
     </Link>
       <DishForm addDishes={addDishes}/>
