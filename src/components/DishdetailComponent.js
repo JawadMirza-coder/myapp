@@ -23,20 +23,19 @@ import {
   ModalBody,
   ModalFooter,
 } from "reactstrap";
-import {Loading} from './Loading';
+import { Loading } from "./Loading";
 function RenderDish({ dish }) {
   if (dish != null) {
     return (
       <>
         <Card>
-          <CardImg top src={baseUrl+dish.image} alt={dish.name} />
+          <CardImg top src={baseUrl + dish.image} alt={dish.name} />
           <CardBody>
             <CardTitle>{dish.name}</CardTitle>
             <CardText>{dish.description}</CardText>
             <CardText>Lable: {dish.label}</CardText>
             <CardText>Price: {dish.price}</CardText>
           </CardBody>
-          
         </Card>
       </>
     );
@@ -94,24 +93,23 @@ class CommentForm extends Component {
 
   handleSubmit(event) {
     this.toggle();
-    this.props.addComment(
+    this.props.postComment(
       this.props.dishId,
       this.state.rating,
       this.state.author,
       this.state.comment,
-    console.log(this.state.rating)
+      console.log(this.state.author)
     );
 
     event.preventDefault();
   }
   render() {
-
     const errors = this.validate(this.state.author);
     return (
       <>
-         <Button outline color="success" onClick={this.toggle}>
-                    {this.props.buttonLabel} Login
-                  </Button>
+        <Button outline color="success" onClick={this.toggle}>
+          {this.props.buttonLabel} Login
+        </Button>
         <div>
           <Modal
             isOpen={this.state.modal}
@@ -178,13 +176,9 @@ class CommentForm extends Component {
                 </FormGroup>
               </ModalBody>
               <ModalFooter>
-                <FormGroup row>
-                  <Col>
-                    <Button type="submit" color="primary" onClick={this.toggle}>
-                      Send Feedback
-                    </Button>
-                  </Col>
-                </FormGroup>
+                <Button type="submit" value="submit" color="primary">
+                  Login
+                </Button>
               </ModalFooter>
             </Form>
           </Modal>
@@ -194,19 +188,21 @@ class CommentForm extends Component {
   }
 }
 
-function Rendercomments({ comt, addComment, dishId }) {
+function Rendercomments({ comt, postComment, dishId }) {
   if (comt != null) {
-    console.log("this is in")
+    console.log("this is in");
     const coents = comt.map((cmnt) => {
       return (
-          <div  key={cmnt.id}>
-          <div >
+        <div key={cmnt.id}>
+          <div>
             <Card>
-              <CardBody >
+              <CardBody>
                 <CardText>Comment: {cmnt.comment}</CardText>
                 <CardTitle>--Author: {cmnt.author}</CardTitle>
                 <CardTitle>Rating: {cmnt.rating}</CardTitle>
-                <CardTitle>Date: {new Intl.DateTimeFormat("en-US", {
+                <CardTitle>
+                  Date:{" "}
+                  {new Intl.DateTimeFormat("en-US", {
                     year: "numeric",
                     month: "short",
                     day: "2-digit",
@@ -215,14 +211,11 @@ function Rendercomments({ comt, addComment, dishId }) {
               </CardBody>
             </Card>
           </div>
-          <CommentForm  dishId={dishId} addComment={addComment} />
-          </div>
-         
-         
-   
+          <CommentForm dishId={dishId} postComment={postComment} />
+        </div>
       );
     });
-    return <div> {coents} <CommentForm  dishId={dishId} addComment={addComment} /></div>;
+    return <div> {coents} </div>;
   } else return <div> </div>;
 }
 
@@ -234,63 +227,55 @@ class DishDetail extends Component {
       author: "",
       comment: "",
     };
-    
   }
-  
 
   render() {
-    if(this.props.isLoading){
-      return(
+    if (this.props.isLoading) {
+      return (
         <div className="container">
           <div className="row">
             <Loading />
           </div>
-
         </div>
-      )
-    }
-    else if(this.props.errMess){
-      return(
+      );
+    } else if (this.props.errMess) {
+      return (
         <div className="container">
           <div className="row">
-          <h3>{this.props.errMess}</h3>
+            <h3>{this.props.errMess}</h3>
           </div>
         </div>
-      )
+      );
+    } else if (this.props.dish != null) {
+      return (
+        <>
+          <Breadcrumb>
+            <BreadcrumbItem>
+              <Link to="/home">Home</Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem>
+              <Link to="/menu">Menu</Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem active>Dish Detail</BreadcrumbItem>
+          </Breadcrumb>
+          <div className="container ">
+            <div className="row">
+              <div className=" col-md-5 col-sm-12 m-1">
+                <RenderDish dish={this.props.dish} />
+              </div>
+              <div className="col-6 col-md-5 col-sm-5 m-1">
+                <h3>Comments</h3>
+                <Rendercomments
+                  comt={this.props.comments}
+                  postComment={this.props.postComment}
+                  dishId={this.props.dish.id}
+                />
+              </div>
+            </div>
+          </div>
+        </>
+      );
     }
-  else if(this.props.dish !=null)
-  {
-    return (
-      <>
-        <Breadcrumb>
-          <BreadcrumbItem>
-            <Link to="/home">Home</Link>
-          </BreadcrumbItem>
-          <BreadcrumbItem>
-            <Link to="/menu">Menu</Link>
-          </BreadcrumbItem>
-          <BreadcrumbItem active>Dish Detail</BreadcrumbItem>
-        </Breadcrumb>
-        <div className="container ">
-          <div className="row">
-            <div className=" col-md-5 col-sm-12 m-1">
-              <RenderDish dish={this.props.dish} />
-            </div>
-            <div className="col-6 col-md-5 col-sm-5 m-1">
-              <h3>Comments</h3>
-              <Rendercomments
-                comt={this.props.comments}
-                addComment={this.props.addComment}
-                dishId={this.props.dish.id}
-                
-              />
-             
-            </div>
-          </div>
-        </div>
-      </>
-    );
   }
-}
 }
 export default DishDetail;
