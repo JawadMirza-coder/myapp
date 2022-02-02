@@ -89,7 +89,10 @@ class Main extends Component {
           <Route path="/contactus" component={() => <ContectUs  resetFeedbackForm={this.props.resetFeedbackForm} />} />
           <Route
             path="/aboutus"
-            component={() => <About leader={this.props.leaders.leaders} />}
+            component={() => <About leader={this.props.leaders.leaders}
+            leaderLoading={this.props.leaders.isLoading}
+            leaderErrMess={this.props.leaders.errMess}
+            />}
           />
           <Redirect to="/home" />
         </Switch>

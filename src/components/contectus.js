@@ -11,7 +11,7 @@ import {
 } from "reactstrap";
 import { Control, Form, Errors } from 'react-redux-form';
 import { Link } from "react-router-dom";
-
+import { baseUrl } from "../shared/baseUrl";
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !val || val.length <= len;
 const minLength = (len) => (val) => val && val.length >= len;
@@ -44,9 +44,31 @@ class ContectUs extends Component {
 
  
   handleSubmit(values) {
-    console.log('Current State is: ' + JSON.stringify(values));
-    alert('Current State is: ' + JSON.stringify(values));
+
+    const feedback ={
+      firstname: values.firstname,
+      lastname: values.lastname,
+      telnum: values.telnum,
+      email: values.email,
+      agree: values.agree,
+      contactType: values.contactType,
+      message: values.message,
+    };
+    feedback.date = new Date().toISOString();
+    console.log('Current State is: ' + JSON.stringify(values.firstname));
+    alert('Current State is: ' + JSON.stringify(feedback));
     this.props.resetFeedbackForm();
+    return fetch(baseUrl + 'feedback', {
+      method: "POST",
+      body: JSON.stringify(feedback),
+      headers: {
+        "Content-Type": "application/json"
+      },
+      credentials: "same-origin"
+      
+  })
+
+    
     // event.preventDefault();
 }
   // handleBlur = (field) => (evt) => {

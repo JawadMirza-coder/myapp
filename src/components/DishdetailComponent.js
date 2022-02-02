@@ -24,10 +24,18 @@ import {
   ModalFooter,
 } from "reactstrap";
 import { Loading } from "./Loading";
+
+import { FadeTransform,  Stagger } from 'react-animation-components';
+
 function RenderDish({ dish }) {
   if (dish != null) {
     return (
       <>
+      <FadeTransform
+                in
+                transformProps={{
+                    exitTransform: 'scale(0.5) translateY(-50%)'
+                }}>
         <Card>
           <CardImg top src={baseUrl + dish.image} alt={dish.name} />
           <CardBody>
@@ -37,6 +45,7 @@ function RenderDish({ dish }) {
             <CardText>Price: {dish.price}</CardText>
           </CardBody>
         </Card>
+        </FadeTransform>
       </>
     );
   } else return <div>No</div>;
@@ -191,12 +200,17 @@ class CommentForm extends Component {
 function Rendercomments({ comt, postComment, dishId }) {
   if (comt != null) {
     console.log("this is in");
+    
     const coents = comt.map((cmnt) => {
       return (
+        
+        <Stagger in>
         <div key={cmnt.id}>
           <div>
+          
             <Card>
               <CardBody>
+            
                 <CardText>Comment: {cmnt.comment}</CardText>
                 <CardTitle>--Author: {cmnt.author}</CardTitle>
                 <CardTitle>Rating: {cmnt.rating}</CardTitle>
@@ -208,11 +222,14 @@ function Rendercomments({ comt, postComment, dishId }) {
                     day: "2-digit",
                   }).format(new Date(Date.parse(cmnt.date)))}
                 </CardTitle>
+             
               </CardBody>
             </Card>
+           
           </div>
           <CommentForm dishId={dishId} postComment={postComment} />
         </div>
+        </Stagger>
       );
     });
     return <div> {coents} </div>;
