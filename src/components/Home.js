@@ -30,7 +30,7 @@ function RenderCard({ item, isLoading, errMess }) {
 }
 
 function Home(props) {
-    console.log (props.leaders)
+    console.log (props.promotion)
   return (
      
     <div className="container">
